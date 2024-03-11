@@ -12,3 +12,8 @@
 - Get 12V switching reg working 
 - Test level shifter with 12V
 - Power to cooling fan
+
+## Parts to buy
+- Temperature sensor (ask Nick)
+- Figure out where we are getting 12V
+- Cooling fan

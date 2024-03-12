@@ -11,7 +11,7 @@
 - I2C communication to DE1 via GPIO (Samar)
 - PWM script 3.3V output (Samar) 
     - Can be tested without the temperature sensor 
-- ~~Get 12V~~
+- ~~Get 12V (thank you Hamid)~~
 - Test level shifter with 12V
 - Look for cooling fan (Annie)
     - 4 wire ideally 

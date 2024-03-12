@@ -1,11 +1,12 @@
-# taskManager
-> HW/SW Emulation of Windows Task Manager in Nios II Architecture
+# Bios Settings
+> HW/SW Emulation of Windows Bios Setting in Nios II Architecture
 
 ## TODO
 - VGA Driver (Annie)
     - Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA
     - UI similar to Task Manager
     - If time, real-time line graph that shows temperature and RPM changing overtime
+- 
 - Analog sensor read to MCU (Samar)
 - I2C communication to DE1 via GPIO (Samar)
 - PWM script 3.3V output (Samar) 

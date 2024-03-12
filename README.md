@@ -1,5 +1,5 @@
 # Bios Settings
-> HW/SW Emulation of Windows Bios Setting in Nios II Architecture
+> HW/SW Emulation of Windows Bios Settings in Nios II Architecture
 
 ## TODO
 - VGA Driver (Annie)
@@ -11,15 +11,14 @@
 - I2C communication to DE1 via GPIO (Samar)
 - PWM script 3.3V output (Samar) 
     - Can be tested without the temperature sensor 
-- Get 12V switching reg working 
+- ~~Get 12V~~
 - Test level shifter with 12V
-- Power to cooling fan
-- Batteries in multimeter
+- Look for cooling fan (Annie)
+    - 4 wire ideally 
+- ~~Batteries in multimeter~~
 
 ## Parts to buy
 - Temperature sensor
     - [LilyPad one](https://www.creatroninc.com/product/lilypad-temperature-sensor/)
-- 12V supply
-    - [12V buckboost](https://www.creatroninc.com/product/1-25-26v-1a-adjustable-step-up-down-regulator/)
 - Cooling fan
     - [12V DC brushless fan](https://www.creatroninc.com/product/12v-dc-brushless-fan-70x70x15mm/)

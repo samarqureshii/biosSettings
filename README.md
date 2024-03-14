@@ -1,5 +1,5 @@
 # Bios Settings
-> HW/SW Emulation of Windows Bios Settings in Nios II Architecture
+> HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
 ## Schematic
 ![schematic-rev1](Untitled.png)
 ## TODO

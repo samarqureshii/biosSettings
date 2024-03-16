@@ -1,0 +1,42 @@
+{
+  "C_Cpp_Runner.cCompilerPath": "/Users/samarqureshi/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+  "C_Cpp_Runner.cppCompilerPath": "/Users/samarqureshi/.platformio/packages/toolchain-atmelavr/bin/avr-g++",
+  "C_Cpp_Runner.debuggerPath": "/Users/samarqureshi/.platformio/packages/toolchain-atmelavr/bin/avr-gdb",
+  "C_Cpp_Runner.cStandard": "gnu11",
+  "C_Cpp_Runner.cppStandard": "gnu++11",
+  "C_Cpp_Runner.msvcBatchPath": "",
+  "C_Cpp_Runner.useMsvc": false,
+  "C_Cpp_Runner.warnings": [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic"
+  ],
+  "C_Cpp_Runner.enableWarnings": true,
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.compilerArgs": [],
+  "C_Cpp_Runner.linkerArgs": [],
+  "C_Cpp_Runner.includePaths": [
+    "/Users/samarqureshi/Documents/GitHub/taskManager/mcu_testing/include",
+    "/Users/samarqureshi/Documents/GitHub/taskManager/mcu_testing/src",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/cores/arduino",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/variants/standard",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+    "/Users/samarqureshi/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+    ""
+  ],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ]
+}

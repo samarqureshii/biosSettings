@@ -11,11 +11,14 @@
 - Audio driver (Annie)
     - The faster the RPM, the higher the frequency 
 - Analog sensor read to MCU (Samar)
-- I2C communication to DE1 via GPIO (Samar)
-- PWM script 3.3V output (Samar) 
+- I2C write to DE1 (Samar)
+- I2C read from MCU (Samar)
+    - Figure out how to do this with interrupts
+- PWM script 5V output (Samar) 
     - Test with MCU 5V first 
-- ~~Get 12V (thank you Hamid)~~
+- ~~Get power supply/boost converter (thank you Hamid)~~
 - Test level shifter with 12V
+- ~~Get cooling fan (Samar)~~
 - ~~Look for cooling fan (Annie)~~
     - 4 wire ideally 
 - ~~Batteries in multimeter~~

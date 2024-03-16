@@ -23,8 +23,9 @@
     - 4 wire ideally 
 - ~~Batteries in multimeter~~
 
+## Datasheets
+- [PWM controlled fan (9GA0812P7G001)](https://www.mouser.ca/datasheet/2/471/San_Ace_80GA15_E-1360952.pdf)
 ## Parts to buy/acquire
-- 
 - Temperature sensor
     - [LilyPad one](https://www.creatroninc.com/product/lilypad-temperature-sensor/)
 - Cooling fan

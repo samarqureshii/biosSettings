@@ -4,26 +4,36 @@ const int pwmPin = 3;
 const int tachPin = 5;
 
 int PWMcontrol(int temperature);
+int dutyCycle = 0;
 
 void setup() {
   pinMode(pwmPin, OUTPUT);
   pinMode(tachPin, INPUT);
   Serial.begin(9600);
+  
 }
 
 void loop() {
-  for (int temp = 22; temp < 100; temp++) { //22 deg C to 100deg C
 
-    analogWrite(pwmPin, PWMcontrol(temp));
+    analogWrite(pwmPin, dutyCycle);
 
-    Serial.print("Temperature: ");
-    Serial.print(temp);
-    Serial.print("C, PWM Duty Cycle: ");
-    Serial.println(PWMcontrol(temp));
-    Serial.println("/n/n");
+    // Serial.print("Temperature: ");
+    // Serial.print(temp);
+    Serial.print("PWM Duty Cycle: ");
+    Serial.println(dutyCycle);
+    Serial.println("\n\n");
 
-    delay(2000);
-  }
+    delay(100);
+    dutyCycle++;
+    if(dutyCycle>=255){ // reset the duty cycle
+      dutyCycle = 0;
+    }
+
+    int durationHigh = pulseIn(tachPin, HIGH);
+    int durationCycle = durationHigh + pulseIn(tachPin, LOW);
+    int speed = (durationHigh / (float)durationCycle) * 100;
+    Serial.println("Speed (RPM): ");
+    Serial.println(speed*62.88);
 }
 
 int PWMcontrol(int temperature) {

@@ -2,11 +2,27 @@
 
 const int pwmPin = 3; 
 const int tachPin = 5;
+// const int led1 = 2;
+// const int led2 = 4;
+// const int led3 = 6;
+// const int led4 = 7;
+// const int led5 = 8;
+// const int led6 = 9;
+// const int led7 = 10;
+// const int led8 = 11;
+// const int led9 = 12;
+// const int led10 = 12;
+const int ledPins[] = {2, 4, 6, 7, 8, 9, 10, 11, 12, 13};
 
 int PWMcontrol(int temperature);
 int dutyCycle = 0;
 
 void setup() {
+  //RPM OUTPUT (10 bit LEDs)
+  for(int i = 0; i< 10; i++){
+    pinMode(ledPins[i], OUTPUT);
+  }
+  //MOTOR CONTROL
   pinMode(pwmPin, OUTPUT);
   pinMode(tachPin, INPUT);
   Serial.begin(9600);
@@ -16,7 +32,6 @@ void setup() {
 void loop() {
 
     analogWrite(pwmPin, dutyCycle);
-
     // Serial.print("Temperature: ");
     // Serial.print(temp);
     Serial.print("PWM Duty Cycle: ");
@@ -32,8 +47,10 @@ void loop() {
     int durationHigh = pulseIn(tachPin, HIGH);
     int durationCycle = durationHigh + pulseIn(tachPin, LOW);
     int speed = (durationHigh / (float)durationCycle) * 100;
-    Serial.println("Speed (RPM): ");
-    Serial.println(speed*62.88);
+    Serial.println("Raw Speed (tach-in): ");
+    Serial.println(speed);
+
+
 }
 
 int PWMcontrol(int temperature) {

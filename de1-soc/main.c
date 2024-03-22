@@ -5,7 +5,7 @@
 
 
 int main (void){
-    float temperature = 0;
+    int temperature = 0;
     int RPM = 0; //fan speed in revolutions per 
 
     while(1){

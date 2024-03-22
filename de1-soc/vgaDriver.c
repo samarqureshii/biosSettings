@@ -3,6 +3,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-int vgaDriver(float temperature, int fanSpeed){
+int vgaDriver(int temperature, int fanSpeed){
 
 }

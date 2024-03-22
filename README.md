@@ -11,20 +11,21 @@
 - Audio driver (Annie)
     - The faster the RPM, the higher the frequency 
 - Analog sensor read to MCU (Samar)
-- I2C write to DE1 (Samar)
-- I2C read from MCU (Samar)
-    - Figure out how to do this with interrupts
-- PWM script 5V output (Samar) 
-    - Test with MCU 5V first 
+- ADC sensor read to DE1-SoC (Samar)
+    - Temperature reading on the HEX display
+- Test level shifter with 5V (Samar)
+- Fan spinning with PWM DE1-SoC 5V (Samar) 
+    - RPM on the LEDs (map 6100 RPM to 1023 bits)
+    - Before temperature integration, use switches to test RPM. Remove once ADC works
+- ~~Fan spinning with PWM MCU @ 5V (Samar)~~
 - ~~Get power supply/boost converter (thank you Hamid)~~
-- Test level shifter with 12V
 - ~~Get cooling fan (Samar)~~
 - ~~Look for cooling fan (Annie)~~
-    - 4 wire ideally 
 - ~~Batteries in multimeter~~
 
 ## Datasheets
 - [PWM controlled fan (9GA0812P7G001)](https://www.mouser.ca/datasheet/2/471/San_Ace_80GA15_E-1360952.pdf)
+- [Temperature sensor (TMP36)](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)
 ## Parts to buy/acquire
 - Temperature sensor
     - [LilyPad one](https://www.creatroninc.com/product/lilypad-temperature-sensor/)

@@ -17,6 +17,7 @@
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - RPM on the LEDs (map 6100 RPM to 1023 bits)
     - Before temperature integration, use switches to test RPM. Remove once ADC works
+- Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed 
 - ~~Fan spinning with PWM MCU @ 5V (Samar)~~
 - ~~Get power supply/boost converter (thank you Hamid)~~
 - ~~Get cooling fan (Samar)~~

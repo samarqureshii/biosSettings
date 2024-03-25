@@ -3,22 +3,28 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define JP2_BASE            0xFF200070 //GPIO_1 memory mapped address
+#define JP1_BASE			0xFF200060
+#define JP2_BASE			0xFF200070 //GPIO_1 memory mapped address
+#define LED_BASE			0xFF200000 //red LEDs
+#define SW_BASE				0xFF200040 //switch base 
+#define TIMER_BASE			0xFF202000 //timer base 
 #define TIMER_COUNT         100000000 / (2 * 25000) // 100MHz clock / (2 * 25kHz PWM frequency)
+#define SYSTEM_CLOCK        100000000
 
 volatile int *GPIO_1 = (volatile int *)JP2_BASE;
+volatile int *SW = (volatile int *)SW_BASE;
 
-void PWMcontrol() {
-    int half_period = TIMER_COUNT;
+void PWMcontrol(int frequency) {
+    int half_period =  SYSTEM_CLOCK / (2 * frequency);;
 
     // generate the square wave signal
-    for (int cycle = 0; cycle < 25000; ++cycle) {
+    for (int cycle = 0; cycle < frequency; ++cycle) { //one cycle 
         // set the GPIO pin high
         *GPIO_1 |= 0x1;
 
         // on-time delay
         for (volatile int i = 0; i < half_period; ++i);
-        
+
         *GPIO_1 &= ~0x1;
 
         // off-time delay
@@ -32,7 +38,9 @@ int main(void) {
     *gpio_direction_reg = 0x00000001;
 
     while (1) {
-        PWMcontrol(); 
+        int SW_state = *SW; 
+        int frequency = ((SW_state & 0x3FF) * 20) + 100; // map switch state to frequency, increment by 20 Hz
+        PWMcontrol(frequency);
     }
 
     return 0; 

@@ -12831,14 +12831,17 @@ int main(void) {
   pixel_buffer_start = *(pixel_ctrl_ptr + 1);  // we draw on the back buffer
   clear_screen();  // pixel_buffer_start points to the pixel buffer
 
-  int k = 0;
   while (1) {
-    for (int i = 0; i < 240; i++) {
-      for (int j = 0; j < 320; j++) {
-        plot_pixel(j, i, ((screen_map[k] << 6 | screen_map[k + 1])));
-        k = k + 2;
-      }
+    for (int k = 0; k < 153600; k += 2) {
+      int red = ((screen_map[k + 1] & 0xF8) >> 3) << 11;
+      int green =
+          (((screen_map[k] & 0xE0) >> 5)) | ((screen_map[k + 1] & 0x7) << 3);
+      int blue = (screen_map[k] & 0x1f);
+
+      short int p = red | ((green << 5) | blue);
+      plot_pixel((k / 2) % 320, (k / 2) / 320, p);
     }
+
     wait_for_vsync();  // swap front and back buffers on VGA vertical sync
     pixel_buffer_start = *(pixel_ctrl_ptr + 1);  // new back buffer
   }

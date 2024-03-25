@@ -18,6 +18,8 @@ void PWMcontrol() {
 
         // on-time delay
         for (volatile int i = 0; i < half_period; ++i);
+        
+        *GPIO_1 &= ~0x1;
 
         // off-time delay
         for (volatile int i = 0; i < half_period; ++i);

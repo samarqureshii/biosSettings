@@ -17,13 +17,15 @@
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - RPM on the LEDs (map 6100 RPM to 1023 bits)
     - Before temperature integration, use switches to test RPM. Remove once ADC works
+    - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
 - Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed 
 - ~~Fan spinning with PWM MCU @ 5V (Samar)~~
 - ~~Get power supply/boost converter (thank you Hamid)~~
 - ~~Get cooling fan (Samar)~~
 - ~~Look for cooling fan (Annie)~~
 - ~~Batteries in multimeter~~
-
+## Working Commits
+- `fdb939e` has the 50% PWM signal 
 ## Datasheets
 - [PWM controlled fan (9GA0812P7G001)](https://www.mouser.ca/datasheet/2/471/San_Ace_80GA15_E-1360952.pdf)
 - [Temperature sensor (TMP36)](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)

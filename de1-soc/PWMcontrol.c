@@ -26,7 +26,7 @@ void PWMcontrol(int temperature) {
     // map temperature to RPM linearly
     int RPM = (temperature * 6100) / 1023;
 
-    // Calculate duty cycle as a percentage
+    // calculate duty cycle as a percentage
     int dutyCycle = RPM / 6100;
 
     int high = dutyCycle * TIMER_COUNT; //count for every edge of the clock we are HIGH
@@ -57,6 +57,10 @@ int PWMread(){
 }
 
 int main(void){
+    //set the direction register of the JP2 BASE to output 
+    volatile int *gpio_direction_reg = (volatile int *)(JP2_BASE + 4);
+    *gpio_direction_reg = 0x00000001;
+    
     while(1){
         temperature = *SW;
         PWMcontrol(temperature);

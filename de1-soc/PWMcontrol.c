@@ -3,6 +3,14 @@
 #include <stdbool.h>
 #include <time.h>
 
+#define TIMER_BASE          0xFF202000
+#define timerStatus ((volatile short*) (TIMER_BASE))
+#define timerControl ((volatile short*) (timer+4))
+#define timerTimeoutL ((volatile short*) (timer+8))
+#define timerTimeoutH ((volatile short*) (timer+12))
+#define timerSnapshotL ((volatile short*) (timer+16))
+#define timerSnapshotH ((volatile short*) (timer+20))
+
 #define JP1_BASE			0xFF200060
 #define JP2_BASE			0xFF200070 //GPIO_1 memory mapped address
 #define LED_BASE			0xFF200000 //red LEDs

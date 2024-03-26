@@ -1,9 +1,39 @@
-<mxfile host="app.diagrams.net" modified="2024-03-26T01:13:59.676Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15" version="24.0.4" etag="Kap37NGBpykqVVxHtsi9" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-26T01:22:09.841Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15" etag="1sVMnLDcX4Tgzg43ERYW" version="24.0.4" type="github">
   <diagram name="Page-1" id="R7lpvw8uGEseStx-Qea4">
-    <mxGraphModel>
+    <mxGraphModel dx="1118" dy="599" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-1" value="DE1-SoC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCE5FF;" vertex="1" parent="1">
+          <mxGeometry x="270" y="130" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-2" value="MCU #2 (voltage regualtor)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;" vertex="1" parent="1">
+          <mxGeometry x="375" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-3" value="MCU #1 (external debugging)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;" vertex="1" parent="1">
+          <mxGeometry x="375" y="470" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-4" value="Cooling Fan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E5CCFF;" vertex="1" parent="1">
+          <mxGeometry x="580" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-5" value="Analog (Transistor Based) Temperature Sensor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E5CCFF;" vertex="1" parent="1">
+          <mxGeometry x="150" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-6" value="Bidirectional Level Shifter (5/3.3V)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E5CCFF;" vertex="1" parent="1">
+          <mxGeometry x="375" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-8" value="VGA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCE5FF;" vertex="1" parent="1">
+          <mxGeometry x="375" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-9" value="HEX/LEDs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCE5FF;" vertex="1" parent="1">
+          <mxGeometry x="220" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-10" value="Audio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCE5FF;" vertex="1" parent="1">
+          <mxGeometry x="540" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o6aeoP1H5NjbT9gdP4up-11" value="12V Power Supply" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCCCC;" vertex="1" parent="1">
+          <mxGeometry x="580" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

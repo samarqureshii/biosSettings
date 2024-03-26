@@ -10,7 +10,7 @@
 ![example-ui](maxresdefault.jpg)
 - Audio driver (Annie)
     - The faster the RPM, the higher the frequency 
-- Analog sensor read to MCU (Samar)
+- ~~Analog sensor read to MCU (Samar)~~
 - ADC sensor read to DE1-SoC (Samar)
     - Temperature reading on the HEX display
 - Test level shifter with 5V (Samar)

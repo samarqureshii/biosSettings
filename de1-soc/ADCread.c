@@ -2,9 +2,11 @@
 #define ADC_BASE			0xFF204000
 #define HEX3_HEX0_BASE			0xFF200020
 #define HEX5_HEX4_BASE			0xFF200030
+#define LED_BASE			0xFF200000
 
-volatile int *HEX3_0 = (volatile int *)HEX3_HEX0_BASE;
-volatile int *ADC = (volatile int *)ADC_BASE;
+volatile int *HEX3_0 = HEX3_HEX0_BASE;
+volatile int *ADC = ADC_BASE;
+volatile int *LEDs = LED_BASE;
 
 int lookupTable[10] = {
     0b00111111, // 0
@@ -32,17 +34,24 @@ void adcRead(){ //read from the internal 12-bit ADC
     float tempC = (voltage - 0.75) / (10.0 / 1000.0); // convert to temperature
     int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // round to nearest int
 
-    int hundreds = temperature / 100;
-    int tens = (temperature % 100) / 10;
-    int ones = temperature % 10;
-
-
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)
     // bits 14 - 8 are HEX1 (tens place)
     // bits 22 - 16 are HEX2 (hundreds place)
 
     //extract each digit and display on the corresponding hex
+    int hundreds = temperature / 100;
+    int tens = (temperature % 100) / 10;
+    int ones = temperature % 10;
+
+    //*HEX3_0 = 0;
+
+    if (temperature < 100) {
+        hundreds = 0;
+    }
+
+    // Set the value for each HEX display
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
+    *LEDs = temperature;
 
 }

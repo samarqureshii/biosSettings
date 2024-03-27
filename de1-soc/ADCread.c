@@ -30,9 +30,8 @@ int main(void){
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    float voltage = *ADC * (5.0 / 1023.0);
-    float tempC = (voltage - 0.75) / (10.0 / 1000.0); // convert to temperature
-    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // round to nearest int
+    int voltage = *ADC * (5000 / 4095);
+    int temperature = (voltage - 750) / 10 + 25; // convert to temperature
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)

@@ -6,6 +6,19 @@
 volatile int *HEX3_0 = (volatile int *)HEX3_HEX0_BASE;
 volatile int *ADC = (volatile int *)ADC_BASE;
 
+int lookupTable[10] = {
+    0b00111111, // 0
+    0b00000110, // 1
+    0b01011011, // 2
+    0b01001111, // 3
+    0b01100110, // 4
+    0b01101101, // 5
+    0b01111101, // 6
+    0b00000111, // 7
+    0b01111111, // 8
+    0b01101111  // 9
+};
+
 void adcRead();
 int temperature;
 
@@ -15,15 +28,14 @@ int main(void){
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    temperature = *ADC;
+    float voltage = *ADC * (5.0 / 4095.0);
+    float tempC = (voltage - 0.75) / (10.0 / 1000.0); // convert to temperature
+    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // round to nearest int
 
-    // display the current temperature on the hex
-    //extract the ones bit and display on HEX0
-    if(temperature > 9){    //then extract the tens bit and display on HEX1
-        if(temperature > 99){ //then extract the hundreds bit and display on HEX2
+    int hundreds = temperature / 100;
+    int tens = (temperature % 100) / 10;
+    int ones = temperature % 10;
 
-        }
-    }
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)
@@ -31,4 +43,6 @@ void adcRead(){ //read from the internal 12-bit ADC
     // bits 22 - 16 are HEX2 (hundreds place)
 
     //extract each digit and display on the corresponding hex
+    *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
+
 }

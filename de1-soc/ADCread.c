@@ -30,7 +30,7 @@ int main(void){
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    float voltage = *ADC * (5.0 / 4095.0);
+    float voltage = *ADC * (5.0 / 1023.0);
     float tempC = (voltage - 0.75) / (10.0 / 1000.0); // convert to temperature
     int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // round to nearest int
 

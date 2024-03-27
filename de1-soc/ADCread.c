@@ -4,9 +4,9 @@
 #define HEX5_HEX4_BASE			0xFF200030
 #define LED_BASE			0xFF200000
 
-volatile int *HEX3_0 = HEX3_HEX0_BASE;
-volatile int *ADC = ADC_BASE;
-volatile int *LEDs = LED_BASE;
+volatile int *HEX3_0 = (volatile int*) HEX3_HEX0_BASE;
+volatile int *ADC = (volatile int*) ADC_BASE;
+volatile int *LEDs = (volatile int*) LED_BASE;
 
 int lookupTable[10] = {
     0b00111111, // 0

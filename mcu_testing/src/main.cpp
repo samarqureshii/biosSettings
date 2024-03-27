@@ -2,8 +2,8 @@
 
 const int pwmPin = 3; 
 const int tachPin = 5;
-const int tempSensor = A0;
-const float scaleFactor = 20; //20 mV
+// const int tempSensor = A0;
+// const float scaleFactor = 20; //20 mV
 // const int led1 = 2;
 // const int led2 = 4;
 // const int led3 = 6;
@@ -32,14 +32,17 @@ void setup() {
   
 }
 
-void loop() {
+void loop() { //MAKE SURE TO POWER IT WITH 5V as reference (DO NOT USE EXTERNAL REFERENCE FUNCTION)
   int sensorVal = analogRead(A0);
-  float voltage = sensorVal*(3.3/1023);
-  float tempC = (voltage - 0.5)/(20.0/1000.0);
+  float voltage = sensorVal * (5.0 / 1023.0); // correctly convert the reading to voltage
+  float tempC = (voltage - 0.75) / (10.0 / 1000.0); // convert to temperature
+  int tempCInt = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // round to nearest int
+
   Serial.print("Temperature: ");
-  Serial.print(sensorVal);
+  Serial.print(tempCInt); // Print the integer temperature
   Serial.println(" C");
   delay(1000);
+
 
     // analogWrite(pwmPin, dutyCycle);
     // // Serial.print("Temperature: ");

@@ -13,11 +13,13 @@
 - ~~Analog sensor read to MCU (Samar)~~
 - ADC sensor read to DE1-SoC (Samar)
     - Temperature reading on the HEX display
-- Test level shifter with 5V (Samar)
+    - Figure out scaled calibration of the sensor 
+- ~~Test level shifter with 5V (Samar)~~
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - RPM on the LEDs (map 6100 RPM to 1023 bits)
     - Before temperature integration, use switches to test RPM. Remove once ADC works
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
+- Motor and temp sensor integrated (Samar)
 - Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed 
 - ~~Fan spinning with PWM MCU @ 5V (Samar)~~
 - ~~Get power supply/boost converter (thank you Hamid)~~

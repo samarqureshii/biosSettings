@@ -20,6 +20,7 @@
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - RPM on the LEDs (map 6100 RPM to 1023 bits)
     - Before temperature integration, use switches to test RPM. Remove once ADC works
+    - If time, convert the hardware timer code to use interrupts 
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
 - Motor and temp sensor integrated (Samar)
 - Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed 

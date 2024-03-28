@@ -30,7 +30,7 @@ int main(void){
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    int rawADC = (*ADC_CH0 & 0x7FFF) & 0xFFF;
+    int rawADC = (*ADC_CH0 & 0xFFF);
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
     float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
     int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // maybe remove, no arduino

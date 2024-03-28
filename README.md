@@ -1,5 +1,6 @@
 # Bios Settings
 > HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
+- `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
 ## Schematic
 ![schematic-rev1](Untitled.png)
 ## TODO
@@ -7,6 +8,7 @@
     - Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA
     - UI similar to Task Manager
     - If time, real-time line graph that shows temperature and RPM changing overtime
+    - ~~Working on CPUlator~~
 ![example-ui](maxresdefault.jpg)
 - Audio driver (Annie)
     - The faster the RPM, the higher the frequency 

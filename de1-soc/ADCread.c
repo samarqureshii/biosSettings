@@ -5,7 +5,7 @@
 #define LED_BASE			0xFF200000
 
 volatile int *HEX3_0 = (volatile int*) HEX3_HEX0_BASE;
-volatile int *ADC = (volatile int*) ADC_BASE;
+volatile int *ADC_CH0 = (volatile int*) ADC_BASE;
 volatile int *LEDs = (volatile int*) LED_BASE;
 
 int lookupTable[10] = {
@@ -30,8 +30,10 @@ int main(void){
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    int voltage = *ADC * (5000 / 4095);
-    int temperature = (voltage - 750) / 10 + 25; // convert to temperature
+    int rawADC = (*ADC_CH0 & 0x7FFF) & 0xFFF;
+    float voltage = rawADC * (5.0 / 1023.0);
+    float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25;
+    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25;
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)
@@ -39,9 +41,9 @@ void adcRead(){ //read from the internal 12-bit ADC
     // bits 22 - 16 are HEX2 (hundreds place)
 
     //extract each digit and display on the corresponding hex
-    int hundreds = temperature / 100;
+    int hundreds = (int)temperature / 100;
     int tens = (temperature % 100) / 10;
-    int ones = temperature % 10;
+    int ones = (int)temperature % 10;
 
     //*HEX3_0 = 0;
 
@@ -49,8 +51,8 @@ void adcRead(){ //read from the internal 12-bit ADC
         hundreds = 0;
     }
 
-    // Set the value for each HEX display
+
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
-    *LEDs = temperature;
+    *LEDs = temperature; //temporary debug 
 
 }

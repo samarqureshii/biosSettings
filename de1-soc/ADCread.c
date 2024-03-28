@@ -1,5 +1,5 @@
 
-#define ADC_BASE			0xFF204000
+#define ADC_BASE			0xFF204008
 #define HEX3_HEX0_BASE			0xFF200020
 #define HEX5_HEX4_BASE			0xFF200030
 #define LED_BASE			0xFF200000
@@ -53,6 +53,6 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
-    *LEDs = temperature; //temporary debug 
+    *LEDs = rawADC / 4; //temporary debug 
 
 }

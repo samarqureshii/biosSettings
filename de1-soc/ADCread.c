@@ -55,6 +55,6 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
-    *LEDs = rawADC/4; //temporary debug 
+    *LEDs = temperature; //temporary debug 
 
 }

@@ -1,11 +1,11 @@
 
-#define ADC_BASE			0xFF204008
+#define ADC_BASE			0xFF204000
 #define HEX3_HEX0_BASE			0xFF200020
 #define HEX5_HEX4_BASE			0xFF200030
 #define LED_BASE			0xFF200000
 
 volatile int *HEX3_0 = (volatile int*) HEX3_HEX0_BASE;
-volatile int *ADC_CH0 = (volatile int*) ADC_BASE;
+volatile int *ADC_ptr = (int *) ADC_BASE;
 volatile int *LEDs = (volatile int*) LED_BASE;
 
 int lookupTable[10] = {
@@ -29,8 +29,10 @@ int main(void){
 }
 
 void adcRead(){ //read from the internal 12-bit ADC
+	*(ADC_ptr + 1) = 1;	// sets the ADC up to automatically perform conversions
+
     //scale / convert raw 12 bit ADC reading into integer temperature value 
-    int rawADC = (*ADC_CH0 & 0xFFF);
+    int rawADC = *(ADC_ptr) & 0xFFF;
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
     float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
     int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // maybe remove, no arduino
@@ -53,6 +55,6 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
-    *LEDs = rawADC / 4; //temporary debug 
+    *LEDs = rawADC ; //temporary debug 
 
 }

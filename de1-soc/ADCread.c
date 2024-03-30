@@ -27,7 +27,9 @@ int temperature;
 
 int main(void){
     *ADC_update = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
-    adcRead(); // read adc and display the temperature value on the HEX
+    while(1){
+        adcRead(); // read adc and display the temperature value on the HEX
+    }
 }
 
 void adcRead(){ //read from the internal 12-bit ADC

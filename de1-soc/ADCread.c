@@ -26,12 +26,11 @@ void adcRead();
 int temperature;
 
 int main(void){
+    *ADC_update = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
     adcRead(); // read adc and display the temperature value on the HEX
 }
 
 void adcRead(){ //read from the internal 12-bit ADC
-	*ADC_update = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
-
     //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
     int rawADC = *(ADC_ptr) & 0xFFF;
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution

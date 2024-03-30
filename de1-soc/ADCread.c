@@ -1,11 +1,12 @@
 
-#define ADC_BASE			0xFF204008
+#define ADC_BASE			0xFF204000
 #define HEX3_HEX0_BASE			0xFF200020
 #define HEX5_HEX4_BASE			0xFF200030
 #define LED_BASE			0xFF200000
 
 volatile int *HEX3_0 = (volatile int*) HEX3_HEX0_BASE;
 volatile int *ADC_ptr = (int *) ADC_BASE;
+volatile int *ADC_update = (int*) 0xFF204004;
 volatile int *LEDs = (volatile int*) LED_BASE;
 
 int lookupTable[10] = {
@@ -29,7 +30,7 @@ int main(void){
 }
 
 void adcRead(){ //read from the internal 12-bit ADC
-	//*(0xFF204004) = 1;	// sets the ADC up to automatically perform conversions
+	*ADC_update = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
 
     //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
     int rawADC = *(ADC_ptr) & 0xFFF;

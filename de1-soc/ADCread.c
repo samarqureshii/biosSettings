@@ -6,7 +6,6 @@
 
 volatile int *HEX3_0 = (volatile int*) HEX3_HEX0_BASE;
 volatile int *ADC_ptr = (int *) ADC_BASE;
-volatile int *ADC_update = (int*) 0xFF204004;
 volatile int *LEDs = (volatile int*) LED_BASE;
 
 int lookupTable[10] = {
@@ -26,9 +25,33 @@ void adcRead();
 int temperature;
 
 int main(void){
-    *ADC_update = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
+    *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
     while(1){
-        adcRead(); // read adc and display the temperature value on the HEX
+        //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
+        int rawADC = *(ADC_ptr) & 0xFFF;
+        float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
+        float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
+        int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
+
+        //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
+        // bits 6 - 0 are HEX0 (ones place)
+        // bits 14 - 8 are HEX1 (tens place)
+        // bits 22 - 16 are HEX2 (hundreds place)
+
+        //extract each digit and display on the corresponding hex
+        int hundreds = (int)temperature / 100;
+        int tens = (temperature % 100) / 10;
+        int ones = (int)temperature % 10;
+
+        //*HEX3_0 = 0;
+
+        if (temperature < 100) {
+            hundreds = 0;
+        }
+
+
+        *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
+        *LEDs = temperature; //temporary debug 
     }
 }
 

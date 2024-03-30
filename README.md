@@ -18,7 +18,7 @@
     - Figure out scaled calibration of the sensor 
 - ~~Test level shifter with 5V (Samar)~~
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
-    - RPM on the LEDs (map 6100 RPM to 1023 bits)
+    - ~~RPM on the LEDs (map 6100 RPM to 1023 bits)~~
     - Before temperature integration, use switches to test RPM. Remove once ADC works
     - If time, convert the hardware timer code to use interrupts 
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~

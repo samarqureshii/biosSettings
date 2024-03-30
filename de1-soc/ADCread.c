@@ -1,5 +1,5 @@
 
-#define ADC_BASE			0xFF204000
+#define ADC_BASE			0xFF204008
 #define HEX3_HEX0_BASE			0xFF200020
 #define HEX5_HEX4_BASE			0xFF200030
 #define LED_BASE			0xFF200000
@@ -29,13 +29,13 @@ int main(void){
 }
 
 void adcRead(){ //read from the internal 12-bit ADC
-	*(ADC_ptr + 1) = 1;	// sets the ADC up to automatically perform conversions
+	//*(0xFF204004) = 1;	// sets the ADC up to automatically perform conversions
 
-    //scale / convert raw 12 bit ADC reading into integer temperature value 
+    //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
     int rawADC = *(ADC_ptr) & 0xFFF;
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
     float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
-    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) + 25; // maybe remove, no arduino
+    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)

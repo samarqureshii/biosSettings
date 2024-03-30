@@ -1,7 +1,8 @@
 # Bios Settings
 > HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
 - `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
-## Schematic
+### Schematic Revision 2 
+### Schematic Revision 1
 ![schematic-rev1](Untitled.png)
 ## TODO
 - VGA driver (Annie)
@@ -13,9 +14,9 @@
 - Audio driver (Annie)
     - The faster the RPM, the higher the frequency 
 - ~~Analog sensor read to MCU (Samar)~~
-- ADC sensor read to DE1-SoC (Samar)
-    - Temperature reading on the HEX display
-    - Figure out scaled calibration of the sensor 
+- ~~ADC sensor read to DE1-SoC~~ (Samar)
+    - ~~Temperature reading on the HEX display~~
+    - ~~Figure out scaled calibration of the sensor ~~
 - ~~Test level shifter with 5V (Samar)~~
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - ~~RPM on the LEDs (map 6100 RPM to 1023 bits)~~
@@ -23,7 +24,9 @@
     - If time, convert the hardware timer code to use interrupts 
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
 - Motor and temp sensor integrated (Samar)
-- Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed 
+- Full integration (Samar)
+    - Decide if we want multiple C files or just one `main.c`
+- Program separate MCU and short the incoming tach signal to it so we can have 10 LEDs showing current fan speed (Samar)
 - ~~Fan spinning with PWM MCU @ 5V (Samar)~~
 - ~~Get power supply/boost converter (thank you Hamid)~~
 - ~~Get cooling fan (Samar)~~

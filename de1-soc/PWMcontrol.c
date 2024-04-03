@@ -58,28 +58,30 @@ int main(void) {
     NIOS2_WRITE_IENABLE(0x1); // level 0 (interval timer)
     NIOS2_WRITE_STATUS(0x1); // enable Nios II interrupts
 
-    int last_SW_state = -1; // initialize to an invalid state to ensure the first comparison is true
-
     while (1) {
         int SW_state = *SW;
-        int dutyCycle = (SW_state * 100) / 1023; // calculate duty cycle based on SW state
-
-        if (SW_state != last_SW_state) {
-            PWMcontrol(dutyCycle);
-            last_SW_state = SW_state;
-        }
-
-        *LEDs = (dutyCycle * 1023) / 100; // map the duty cycle to the 10-bit LED range
+        //change the duty cycle based upon the current switch state 
+        int dutyCycle = (SW_state * 100) / 1023;
+        PWMcontrol(dutyCycle);
     }
 
     return 0;
 }
 
-
 void PWMcontrol(unsigned int dutyCycle) {
-    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
-    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
+    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100; // high duration
+    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh; // low duration
 
+    if (pwmState == 1) {
+        *GPIO_1 |= 0x1; // Set GPIO high
+        timerConfig(pwmHigh);
+    } else {
+        *GPIO_1 &= ~0x1; // set GPIO low
+        timerConfig(pwmLow);
+    }
+    
+    // Display duty cycle on LEDs by mapping 0-100% to 0-1023 (10-bit)
+    *LEDs = (dutyCycle * 1023) / 100;
 }
 
 void timerISR() {

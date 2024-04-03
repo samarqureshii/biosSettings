@@ -7,8 +7,8 @@
 ![schematic-rev1](Untitled.png)
 ## TODO
 - VGA driver (Annie)
-    - Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA
-    - UI similar to Task Manager
+    - ~~Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA~~
+    - ~~UI similar to Utility Settings~~
     - If time, real-time line graph that shows temperature and RPM changing overtime
     - ~~Working on CPUlator~~
 ![example-ui](maxresdefault.jpg)
@@ -17,11 +17,10 @@
 - ~~Analog sensor read to MCU (Samar)~~
 - ~~ADC sensor read to DE1-SoC~~ (Samar)
     - ~~Temperature reading on the HEX display~~
-    - ~~Figure out scaled calibration of the sensor ~~
+    - ~~Figure out scaled calibration of the sensor~~
 - ~~Test level shifter with 5V (Samar)~~
 - Fan spinning with PWM DE1-SoC 5V (Samar) 
     - ~~RPM on the LEDs (map 6100 RPM to 1023 bits)~~
-    - Before temperature integration, use switches to test RPM. Remove once ADC works
     - If time, convert the hardware timer code to use interrupts 
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
 - Motor and temp sensor integrated (Samar)

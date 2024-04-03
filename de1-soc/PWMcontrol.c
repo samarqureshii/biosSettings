@@ -42,45 +42,62 @@ do { dest = __builtin_rdctl(5); } while (0)
 volatile int *GPIO_1 = (volatile int *)JP2_BASE;
 volatile int *SW = (volatile int *)SW_BASE;
 volatile int *gpio_direction_reg = (volatile int *)(JP2_BASE + 4);
+volatile int *LEDs = (volatile int*) LED_BASE;
+
 int pwmHigh = 0;
 int pwmLow = 0;
 int pwmState = 0; // ON or OFF
 
 void PWMcontrol(unsigned int dutyCycle);
-//void waitTO(); 
 void timerISR();
 void timerConfig(unsigned int duration);
 void interrupt_handler(void); 
-void interruptConfig();
 
-void PWMcontrol(unsigned int dutyCycle) { //keep the frequency static at 25Khz, just toggle the duty cycle based on the switches 
-    unsigned int pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
-    unsigned int pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
+int main(void) {
+    *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
+    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
+    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
 
-    //start with PWM as HIGH
-    *GPIO_1 |= 0x1;
-    pwmState = 1;
-    timerConfig(pwmHigh);
-}
+    int last_SW_state = *SW;
+    int dutyCycle = (last_SW_state * 100) / 1023;
+    PWMcontrol(dutyCycle);
 
-void timerISR(){ //interrupt service routine for the hardware timer 
-    *timerStatus = 0x0; // clear the TO bit by writing 0 to the status register
-
-    if (pwmState == 1) {
-        // if we were high, go low and set up for the low duration
-        *GPIO_1 &= ~0x1;
-        pwmState = 0;
-        timerConfig(pwmLow);
-    } 
-
-    else {
-        // if we were low, go high and set up for the high duration
-        *GPIO_1 |= 0x1;
-        pwmState = 1;
-        timerConfig(pwmHigh);
+    while (1) {
+        int SW_state = *SW;
+        *LEDs = *SW;
+        if (SW_state != last_SW_state) {
+            dutyCycle = (SW_state * 100) / 1023;
+            // update the duty cycle parameters
+            pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
+            pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
+            last_SW_state = SW_state;
+        }
     }
 
-    return;
+    return 0;
+}
+void PWMcontrol(unsigned int dutyCycle) { //keep the frequency static at 25Khz, just toggle the duty cycle based on the switches 
+    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
+    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
+
+    // start with PWM as HIGH
+    *GPIO_1 |= 0x1;
+    pwmState = 1;
+    timerConfig(pwmHigh); 
+}
+
+void timerISR() {
+    *timerStatus = 0x0; // Clear the TO bit
+
+    if (pwmState == 1) {
+        *GPIO_1 &= ~0x1; // Set LOW
+        pwmState = 0;
+        timerConfig(pwmLow); // Setup timer for low duration
+    } else {
+        *GPIO_1 |= 0x1; // Set HIGH
+        pwmState = 1;
+        timerConfig(pwmHigh); // Setup timer for high duration
+    }
 }
 
 // void waitTO() { //polling timer (CPU block)
@@ -94,42 +111,6 @@ void timerConfig(unsigned int duration){ //start the timer
     *timerControl = 0x7; //start and CONT bits 
 }
 
-int main(void) {
-    *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
-    interruptConfig(); // initialize interrupts
-
-    int last_SW_state = *SW;
-    int dutyCycle = (last_SW_state * 100) / 1023;
-    PWMcontrol(dutyCycle);
-
-    while (1) {
-        int SW_state = *SW;
-        // only update PWM if switch state has changed
-        if (SW_state != last_SW_state) {
-            dutyCycle = (SW_state * 100) / 1023;
-            PWMcontrol(dutyCycle);
-            last_SW_state = SW_state;
-        }
-    }
-
-    return 0;
-}
-
-
-void interrupt_handler(void) {  //when the TO bit times out 
-    int ipending;
-    NIOS2_READ_IPENDING(ipending);
-    if (ipending & 0x1){ // timer caused the interrupt
-        timerISR();
-    }
-}
-
-
-void interruptConfig() { //set up interrupts (globally?)
-    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
-    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
-    return;
-}
 
 
 /* The assembly language code below handles CPU exception processing. This
@@ -220,3 +201,10 @@ asm("eret");
 }
 
 
+void interrupt_handler(void) {  //when the TO bit times out 
+    int ipending;
+    NIOS2_READ_IPENDING(ipending);
+    if (ipending & 0x1){ // timer caused the interrupt
+        timerISR();
+    }
+}

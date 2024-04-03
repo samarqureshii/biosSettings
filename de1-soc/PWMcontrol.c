@@ -60,8 +60,9 @@ int main(void) {
 
     while (1) {
         int SW_state = *SW;
-        //change the duty cycle based upon the current switch state 
-        int dutyCycle = (SW_state * 100) / 1023;
+        // Right-shift the switch state to use less of its range and increase sensitivity
+        int adjustedSwitchValue = SW_state >> 7; // Adjust the shift value as needed
+        int dutyCycle = (adjustedSwitchValue * 100) / 127; // Recalculate the duty cycle
         PWMcontrol(dutyCycle);
     }
 

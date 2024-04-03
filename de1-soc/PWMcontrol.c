@@ -55,36 +55,33 @@ void interrupt_handler(void);
 
 int main(void) {
     *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
-    NIOS2_WRITE_IENABLE(0x1); // level 0 (interval timer)
-    NIOS2_WRITE_STATUS(0x1); // enable Nios II interrupts
+    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
+    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
 
     while (1) {
         int SW_state = *SW;
-        // Right-shift the switch state to use less of its range and increase sensitivity
-        int adjustedSwitchValue = SW_state >> 7; // Adjust the shift value as needed
-        int dutyCycle = (adjustedSwitchValue * 100) / 127; // Recalculate the duty cycle
+        *LEDs = *SW; 
+        int dutyCycle = (SW_state * 100) / 1023;
         PWMcontrol(dutyCycle);
     }
 
-    return 0;
+    return 0; 
 }
-
 void PWMcontrol(unsigned int dutyCycle) {
-    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100; // high duration
-    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh; // low duration
+    // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
+    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
+    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
 
     if (pwmState == 1) {
-        *GPIO_1 |= 0x1; // Set GPIO high
+        *GPIO_1 |= 0x1;
         timerConfig(pwmHigh);
-    } else {
-        *GPIO_1 &= ~0x1; // set GPIO low
+    } 
+    
+    else {
+        *GPIO_1 &= ~0x1;
         timerConfig(pwmLow);
     }
-    
-    // Display duty cycle on LEDs by mapping 0-100% to 0-1023 (10-bit)
-    *LEDs = (dutyCycle * 1023) / 100;
 }
-
 void timerISR() {
     *timerStatus = 0x0; // clear the TO bit
 

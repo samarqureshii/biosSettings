@@ -64,39 +64,39 @@ int main(void) {
 
     while (1) {
         int SW_state = *SW;
-        *LEDs = *SW;
-        if (SW_state != last_SW_state) {
-            dutyCycle = (SW_state * 100) / 1023;
-            // update the duty cycle parameters
-            pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
-            pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
-            last_SW_state = SW_state;
-        }
+        *LEDs = *SW; 
+        int dutyCycle = (SW_state * 100) / 1023;
+        PWMcontrol(dutyCycle);
     }
 
     return 0;
 }
-void PWMcontrol(unsigned int dutyCycle) { //keep the frequency static at 25Khz, just toggle the duty cycle based on the switches 
+void PWMcontrol(unsigned int dutyCycle) {
+    // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
     pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
     pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
 
-    // start with PWM as HIGH
-    *GPIO_1 |= 0x1;
-    pwmState = 1;
-    timerConfig(pwmHigh); 
+    if (pwmState == 1) {
+        *GPIO_1 |= 0x1;
+        timerConfig(pwmHigh);
+    } 
+    
+    else {
+        *GPIO_1 &= ~0x1;
+        timerConfig(pwmLow);
+    }
 }
-
 void timerISR() {
-    *timerStatus = 0x0; // Clear the TO bit
+    *timerStatus = 0x0; // clear the TO bit
 
     if (pwmState == 1) {
-        *GPIO_1 &= ~0x1; // Set LOW
+        *GPIO_1 &= ~0x1; // set LOW
         pwmState = 0;
-        timerConfig(pwmLow); // Setup timer for low duration
+        timerConfig(pwmLow); 
     } else {
-        *GPIO_1 |= 0x1; // Set HIGH
+        *GPIO_1 |= 0x1; // set HIGH
         pwmState = 1;
-        timerConfig(pwmHigh); // Setup timer for high duration
+        timerConfig(pwmHigh); 
     }
 }
 

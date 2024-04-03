@@ -116,6 +116,22 @@ int main(void) {
 }
 
 
+void interrupt_handler(void) {  //when the TO bit times out 
+    int ipending;
+    NIOS2_READ_IPENDING(ipending);
+    if (ipending & 0x1){ // timer caused the interrupt
+        timerISR();
+    }
+}
+
+
+void interruptConfig() { //set up interrupts (globally?)
+    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
+    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
+    return;
+}
+
+
 /* The assembly language code below handles CPU exception processing. This
  * code should not be modified; instead, the C language code in the function
  * interrupt_handler() can be modified as needed for a given application.
@@ -204,34 +220,3 @@ asm("eret");
 }
 
 
-void interrupt_handler(void) {  //when the TO bit times out 
-    int ipending;
-    NIOS2_READ_IPENDING(ipending);
-    if (ipending & 0x1){ // timer caused the interrupt
-        timerISR();
-    }
-}
-
-
-void interruptConfig() { //set up interrupts (globally?)
-    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
-    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
-    return;
-}
-
-/* The assembly language code below handles CPU reset processing */
-
-void the_reset(void)
-/*******************************************************************************
- * Reset code. By giving the code a section attribute with the name ".reset" we
- * allow the linker program to locate this code at the proper reset vector
- * address. This code just calls the main program.
- ******************************************************************************/
-{
-    asm(".set noat");
-    asm(".set nobreak");
-    asm("movia r2, main" );
-    asm("jmp r2");
-}
-
- /* Instruct the assembler NOT to use reg at (r1) as * a temp register for performing optimizations  nobreak"); /* Suppresses a warning message that says that * some debuggers corrupt regs bt (r25) and ba

@@ -2,7 +2,8 @@
 > HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
 - `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
 - Exceptions when creating the project
-### Schematic Revision 2 
+### Systems Architecture
+![schematic-rev2](ece243_final.drawio.png)
 ### Schematic Revision 1
 ![schematic-rev1](Untitled.png)
 ## TODO

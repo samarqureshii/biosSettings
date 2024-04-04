@@ -145,11 +145,12 @@ int main (void){
     while(1){
         //read digital temperature via ADC
         *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
-        adcRead();
+        adcRead(); //update the current temperature 
 
         //generate PWM command and updated fan speed 
-        int usage = ((temperature - 25)*100) / 105.0; //duty cycle as a percentage of possible temperature
+        usage = (int)(((temperature - 25) * 100) / 105.0 + 0.5); //duty cycle as a percentage of possible temperature
         PWMcontrol(usage);
+        *LEDs = usage;
 
         //draw and update VGA screen
         // vgaDriver(temperature, RPM, usage);
@@ -168,7 +169,7 @@ void adcRead(){ //read from the internal 12-bit ADC
     int rawADC = *(ADC_ptr) & 0xFFF;
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
     float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
-    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
+    temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)

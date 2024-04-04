@@ -101,7 +101,7 @@ void PWMcontrol(unsigned int dutyCycle);
 void timerISR();
 void timerConfig(unsigned int duration);
 void interrupt_handler(void); 
-int adcRead();
+void adcRead();
 
 /********************************************************************************************************************************/
 /********************************************************GLOBAL VARIABLES********************************************************/
@@ -114,7 +114,7 @@ volatile int *GPIO_1 = (volatile int *)JP2_BASE;
 volatile int *SW = (volatile int *)SW_BASE;
 volatile int *gpio_direction_reg = (volatile int *)(JP2_BASE + 4);
 
-int globalTemp = 0;
+int temperature = 0;
 int RPM = 0; //fan speed in revolutions per min
 int usage = 0;
 int pwmHigh = 0;
@@ -139,16 +139,17 @@ int lookupTable[10] = {
 
 int main (void){
     *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
+    *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
     NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
     NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
 
     while(1){
         //read digital temperature via ADC
-        *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
-        globalTemp = adcRead(); //update the current temperature 
+        //*(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
+        adcRead(); //update the current temperature 
 
         //generate PWM command and updated fan speed 
-        usage = (int)(((globalTemp - 25) * 100) / 105.0 + 0.5); //duty cycle as a percentage of possible temperature
+        usage = (int)(((temperature - 25) * 100) / 105.0 + 0.5); //duty cycle as a percentage of possible temperature
         PWMcontrol(usage);
         *LEDs = usage;
 
@@ -164,12 +165,12 @@ int main (void){
 /********************************************************HELPER FUNCTIONS*******************************************************/
 /*******************************************************************************************************************************/
 
-int adcRead(){ //read from the internal 12-bit ADC
+void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
     int rawADC = *(ADC_ptr) & 0xFFF;
     float voltage = rawADC * (5.0 / 4095.0); //12 bit resolution
     float tempC = (voltage - 0.75) / (10.0 / 1000.0) + 25; //calibration
-    int temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
+    temperature = (int)(tempC + (tempC > 0 ? 0.5 : -0.5)) - 25; // maybe remove, no arduino
 
     //temperature should not go above 3 digits, only use HEX2, HEX1, HEX0
     // bits 6 - 0 are HEX0 (ones place)
@@ -190,7 +191,6 @@ int adcRead(){ //read from the internal 12-bit ADC
 
     *HEX3_0 = (lookupTable[hundreds] << 16) | (lookupTable[tens] << 8) | lookupTable[ones];
 
-    return temperature;
 
 }
 

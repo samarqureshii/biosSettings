@@ -139,13 +139,13 @@ int lookupTable[10] = {
 
 int main (void){
     *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
-    *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
+    // *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
     NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
     NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
 
     while(1){
         //read digital temperature via ADC
-        //*(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
+        *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
         adcRead(); //update the current temperature 
 
         //generate PWM command and updated fan speed 
@@ -194,32 +194,33 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 }
 
-void PWMcontrol(unsigned int dutyCycle) {
+void PWMcontrol(unsigned int dutyCycle) { //confguring timer and calculting the PWM
     // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
-    pwmHigh = SYSTEM_CLOCK / PWM_freq * dutyCycle / 100;
-    pwmLow = SYSTEM_CLOCK / PWM_freq - pwmHigh;
+    pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100);
+    pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
 
     if (pwmState == 1) {
-        *GPIO_1 |= 0x1;
         timerConfig(pwmHigh);
     } 
     
     else {
-        *GPIO_1 &= ~0x1;
         timerConfig(pwmLow);
     }
 }
+
 void timerISR() {
     *timerStatus = 0x0; // clear the TO bit
-
+    
+    pwmState = !pwmState; // toggle the PWM state for the next period
+    
     if (pwmState == 1) {
-        *GPIO_1 &= ~0x1; // set LOW
-        pwmState = 0;
-        timerConfig(pwmLow); 
-    } else {
-        *GPIO_1 |= 0x1; // set HIGH
-        pwmState = 1;
-        timerConfig(pwmHigh); 
+        *GPIO_1 |= 0x1; //high
+        timerConfig(pwmHigh);
+    } 
+    
+    else {
+        *GPIO_1 &= ~0x1; //low
+        timerConfig(pwmLow);
     }
 }
 
@@ -328,4 +329,5 @@ void interrupt_handler(void) {  //when the TO bit times out
     if (ipending & 0x1){ // timer caused the interrupt
         timerISR();
     }
+    return;
 }

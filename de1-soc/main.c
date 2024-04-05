@@ -115,7 +115,7 @@ void print_time();
 void print_char();
 void print_samar(int temperature, int speed, int usage);
 void clear_char();
-void audio();
+void audio(int* samples, int n);
 
 /********************************************************************************************************************************/
 /********************************************************GLOBAL VARIABLES********************************************************/
@@ -157,6 +157,17 @@ int lookupTable[10] = {
     0b01111111, // 8
     0b01101111  // 9
 };
+
+struct audio_t {
+  volatile unsigned int control;
+  volatile unsigned char rarc;
+  volatile unsigned char ralc;
+  volatile unsigned char warc;
+  volatile unsigned char walc;
+  volatile unsigned int ldata;
+  volatile unsigned int rdata;
+};
+struct audio_t *const audiop = ((struct audio_t *)AUDIO_BASE);
 
 const short int static_map[240][320] = {
     {2260, 2260, 2260, 2260, 2260, 2260, 2260, 2260, 2260, 2260, 2260, 2260,
@@ -23571,6 +23582,19 @@ int main (void){
 /*******************************************************************************************************************************/
 /********************************************************HELPER FUNCTIONS*******************************************************/
 /*******************************************************************************************************************************/
+void audio(int *samples, int n) {
+  int i;
+
+  audiop->control = 0x8;  // clear the output FIFOs
+  audiop->control = 0x0;  // resume input conversion
+  for (i = 0; i < n; i++) {
+    // wait till there is space in the output FIFO
+    while (audiop->warc == 0)
+      ;
+    audiop->ldata = samples[i];
+    audiop->rdata = samples[i];
+  }
+}
 
 void adcRead(){ //read from the internal 12-bit ADC
     //scale / convert raw 12 bit ADC reading into integer temperature value (MAKE SURE COMPILE FLAGS ARE ON)
@@ -23668,7 +23692,7 @@ void print_samar(int temperature, int speed, int usage) {
   }
 
   printf("%s\n", temp);  // Print the entire string
-  *LEDR_ptr = temperature;
+
 }
 
 void print_screen(unsigned char byte3) {

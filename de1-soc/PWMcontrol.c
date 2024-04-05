@@ -54,52 +54,20 @@ void timerISR();
 void timerConfig(unsigned int duration);
 void interrupt_handler(void); 
 
-int main(void) {
-    *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
-    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
-    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
-
-    while (1) {
-        *LEDs = dutyCycle;
-    }
-
-    return 0; 
+/* The assembly language code below handles CPU reset processing */
+void the_reset(void) __attribute__((section(".reset")));
+void the_reset(void)
+/*******************************************************************************
+ * Reset code. By giving the code a section attribute with the name ".reset" we
+ * allow the linker program to locate this code at the proper reset vector
+ * address. This code just calls the main program.
+ ******************************************************************************/
+{
+    asm(".set noat");
+    asm(".set nobreak");
+    asm("movia r2, main" );
+    asm("jmp r2");
 }
-
-void timerISR() { //ensures at least one full cycle runs before checking the SW_state again
-    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
-    
-    int SW_state = *SW;
-    dutyCycle = (SW_state * 100) / 1023;
-
-    pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100.0);
-    pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
-    
-    // toggle GPIO 
-    if (pwmState == 1) {
-        *GPIO_1 |= 0x1; //high
-        timerConfig(pwmHigh); 
-    } 
-    
-    else {
-        *GPIO_1 &= ~0x1; // low
-        timerConfig(pwmLow); 
-    }
-    pwmState = !pwmState; // toggle state for next cycle
-}
-
-// void waitTO() { //polling timer (CPU block)
-//     while ((*timerStatus & 0x1) == 0); // wait until the TO  bit is set
-//     *timerStatus = 0x0; // clear the TO bit by writing 0 to the status register
-// }
-
-void timerConfig(unsigned int duration){ //start the timer 
-    *timerTimeoutL = duration & 0xFFFF;
-    *timerTimeoutH = (duration >> 16) & 0xFFFF;
-    *timerControl = 0x7; //start and CONT bits 
-}
-
-
 
 /* The assembly language code below handles CPU exception processing. This
  * code should not be modified; instead, the C language code in the function
@@ -195,4 +163,51 @@ void interrupt_handler(void) {  //when the TO bit times out
     if (ipending & 0x1){ // timer caused the interrupt
         timerISR();
     }
+}
+
+int main(void) {
+    *gpio_direction_reg = 0x00000001; // set GPIO_1[0] as an output pin
+    NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
+    NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
+    timerConfig(1000); //initially configure the timer to enable interrupts and such 
+
+    while (1) {
+        *LEDs = dutyCycle;
+    }
+
+    return 0; 
+}
+
+void timerISR() { //ensures at least one full cycle runs before checking the SW_state again
+    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
+    
+    int SW_state = *SW;
+    dutyCycle = (SW_state * 100) / 1023;
+
+    pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100.0);
+    pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
+    
+    // toggle GPIO 
+    if (pwmState == 1) {
+        *GPIO_1 |= 0x1; //high
+        timerConfig(pwmHigh); 
+    } 
+    
+    else {
+        *GPIO_1 &= ~0x1; // low
+        timerConfig(pwmLow); 
+    }
+    pwmState = !pwmState; // toggle state for next cycle
+}
+
+// void waitTO() { //polling timer (CPU block)
+//     while ((*timerStatus & 0x1) == 0); // wait until the TO  bit is set
+//     *timerStatus = 0x0; // clear the TO bit by writing 0 to the status register
+// }
+
+void timerConfig(unsigned int duration){ //start the timer 
+    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
+    *timerTimeoutL = duration & 0xFFFF; // base + 8
+    *timerTimeoutH = (duration >> 16) & 0xFFFF; // base + 12
+    *timerControl = 0x7; //start and CONT bits  (base + 4)
 }

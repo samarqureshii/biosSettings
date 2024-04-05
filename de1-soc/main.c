@@ -97,7 +97,6 @@ do { dest = __builtin_rdctl(5); } while (0)
 /********************************************************FUNCTION DECLARATIONS********************************************************/
 /************************************************************************************************************************************/
 
-void PWMcontrol(unsigned int dutyCycle);
 void timerISR();
 void timerConfig(unsigned int duration);
 void interrupt_handler(void); 
@@ -116,7 +115,7 @@ volatile int *gpio_direction_reg = (volatile int *)(JP2_BASE + 4);
 
 int temperature = 0;
 int RPM = 0; //fan speed in revolutions per min
-int usage = 0;
+int usage = 0; //CPU usage
 int pwmHigh = 0;
 int pwmLow = 0;
 int pwmState = 0; // ON or OFF
@@ -142,20 +141,19 @@ int main (void){
     // *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
     NIOS2_WRITE_IENABLE(0x1); //level 0 (interval timer)
     NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
+    timerConfig(1000); //initially configure the timer to enable interrupts and such 
 
     while(1){
         //read digital temperature via ADC
         *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
         adcRead(); //update the current temperature 
-
-        //generate PWM command and updated fan speed 
-        usage = (int)(((temperature - 25) * 100) / 105.0 + 0.5); //duty cycle as a percentage of possible temperature
-        PWMcontrol(usage);
-        *LEDs = usage;
+        *LEDs = usage; //change this to display the current RPM 
 
         //draw and update VGA screen
         // vgaDriver(temperature, RPM, usage);
     }
+
+    return 0; 
 
  return 0;
 
@@ -194,34 +192,28 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 }
 
-void PWMcontrol(unsigned int dutyCycle) { //confguring timer and calculting the PWM
-    // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
+void timerISR() { //ensures at least one full cycle runs before checking the SW_state again
+    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
+    
+    int SW_state = *SW;
+    usage = (int)(((temperature - 25) * 100) / 105.0 + 0.5); //map temperature to usage 
+
+    int dutyCycle = usage;
+
     pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100.0);
     pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
-
-    if (pwmState == 1) {
-        timerConfig(pwmHigh);
-    } 
     
-    else {
-        timerConfig(pwmLow);
-    }
-}
-
-void timerISR() {
-    *timerStatus = 0x0; // clear the TO bit
-    pwmState = !pwmState; // toggle the PWM state for the next period
-    
-    //control if we are rising edge or falling edge 
+    // toggle GPIO 
     if (pwmState == 1) {
         *GPIO_1 |= 0x1; //high
-        timerConfig(pwmHigh);
+        timerConfig(pwmHigh); 
     } 
     
     else {
-        *GPIO_1 &= ~0x1; //low
-        timerConfig(pwmLow);
+        *GPIO_1 &= ~0x1; // low
+        timerConfig(pwmLow); 
     }
+    pwmState = !pwmState; // toggle state for next cycle
 }
 
 // void waitTO() { //polling timer (CPU block)
@@ -230,9 +222,10 @@ void timerISR() {
 // }
 
 void timerConfig(unsigned int duration){ //start the timer 
-    *timerTimeoutL = duration & 0xFFFF;
-    *timerTimeoutH = (duration >> 16) & 0xFFFF;
-    *timerControl = 0x7; //start and CONT bits 
+    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
+    *timerTimeoutL = duration & 0xFFFF; // base + 8
+    *timerTimeoutH = (duration >> 16) & 0xFFFF; // base + 12
+    *timerControl = 0x7; //start and CONT bits  (base + 4)
 }
 
 /* The assembly language code below handles CPU exception processing. This

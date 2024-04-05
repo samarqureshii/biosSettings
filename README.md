@@ -6,6 +6,11 @@
 ![schematic-rev2](ece243_final.drawio.png)
 ### Schematic Revision 1
 ![schematic-rev1](Untitled.png)
+
+## Notes for the demo
+- Oscilloscope must be grounded to internal DE1 ground, not the voltage reg or power supply ground
+- Configure blink LED to ensure voltage reg is on 
+- Explain why the level shifter didn't work, and why we are operating at a lower fan speed 
 ## TODO
 - VGA driver (Annie)
     - ~~Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA~~
@@ -20,9 +25,9 @@
     - ~~Temperature reading on the HEX display~~
     - ~~Figure out scaled calibration of the sensor~~
 - ~~Test level shifter with 5V (Samar)~~
-- Fan spinning with PWM DE1-SoC 5V (Samar) 
+- ~~Fan spinning with PWM DE1-SoC 5V~~ (Samar) 
     - ~~RPM on the LEDs (map 6100 RPM to 1023 bits)~~
-    - If time, convert the hardware timer code to use interrupts 
+    - ~~If time, convert the hardware timer code to use interrupts~~
     - ~~PWM signal from DE1-SoC working at 5V with motor (Samar)~~
 - Motor and temp sensor integrated (Samar)
 - Full integration (Samar)

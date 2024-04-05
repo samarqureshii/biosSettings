@@ -196,7 +196,7 @@ void adcRead(){ //read from the internal 12-bit ADC
 
 void PWMcontrol(unsigned int dutyCycle) { //confguring timer and calculting the PWM
     // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
-    pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100);
+    pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100.0);
     pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
 
     if (pwmState == 1) {
@@ -210,9 +210,9 @@ void PWMcontrol(unsigned int dutyCycle) { //confguring timer and calculting the 
 
 void timerISR() {
     *timerStatus = 0x0; // clear the TO bit
-    
     pwmState = !pwmState; // toggle the PWM state for the next period
     
+    //control if we are rising edge or falling edge 
     if (pwmState == 1) {
         *GPIO_1 |= 0x1; //high
         timerConfig(pwmHigh);

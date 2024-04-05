@@ -42,6 +42,7 @@
 - `fdb939e` has the 50% PWM signal with SW timer
 - `264edbc` has the 50% PWM signal with HW timer and interrupts
 - **`fc8e9b2` has the working temperature and motor integration**
+- **`36dd0b3` has full intgeration (bug with character buffer clearing)**
 ## Datasheets
 - [PWM controlled fan (9GA0812P7G001)](https://www.mouser.ca/datasheet/2/471/San_Ace_80GA15_E-1360952.pdf)
 - [Temperature sensor (TMP36)](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)

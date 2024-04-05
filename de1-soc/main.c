@@ -116,6 +116,7 @@ void print_char();
 void print_samar(int temperature, int speed, int usage);
 void clear_char();
 void audio(int* samples, int n);
+void clear_samar();
 
 /********************************************************************************************************************************/
 /********************************************************GLOBAL VARIABLES********************************************************/
@@ -23539,6 +23540,7 @@ int main (void){
         *LEDs = (int)(speed / 5.0);
 
         /**********************************************ANNIE ********************************************/
+        clear_samar();
         // print_time();
         print_char();
 
@@ -23891,6 +23893,14 @@ void timerConfig(unsigned int duration){ //start the timer
     *timerTimeoutL = duration & 0xFFFF; // base + 8
     *timerTimeoutH = (duration >> 16) & 0xFFFF; // base + 12
     *timerControl = 0x7; //start and CONT bits  (base + 4)
+}
+
+void clear_samar() {
+    for (int x = 67; x < 71; x++) {
+        write_char(x, 35, ' ');
+        write_char(x - 7, 18, ' ');
+        write_char(x - 4, 45, ' ');
+    }
 }
 
 /* The assembly language code below handles CPU exception processing. This

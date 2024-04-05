@@ -114,7 +114,7 @@ volatile int *SW = (volatile int *)SW_BASE;
 volatile int *gpio_direction_reg = (volatile int *)(JP2_BASE + 4);
 
 int temperature = 0;
-int RPM = 0; //fan speed in revolutions per min
+int speed = 0; //fan speed in revolutions per min
 int usage = 0; //CPU usage
 int pwmHigh = 0;
 int pwmLow = 0;
@@ -148,6 +148,12 @@ int main (void){
         *(ADC_ptr+1) = 0xFFFFFFFF;	// sets the ADC up to automatically perform conversions
         adcRead(); //update the current temperature 
         *LEDs = usage; //change this to display the current RPM 
+
+        //update the speed based on the CPU usage 
+        speed = (usage * 5124.0) / 100.0;
+        printf("%d\n", speed);
+
+        *LEDs = (int)(speed / 5.0);
 
         //draw and update VGA screen
         // vgaDriver(temperature, RPM, usage);

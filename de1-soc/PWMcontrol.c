@@ -47,6 +47,7 @@ volatile int *LEDs = (volatile int*) LED_BASE;
 int pwmHigh = 0;
 int pwmLow = 0;
 int pwmState = 0; // ON or OFF
+int dutyCycle = 0;
 
 void PWMcontrol(unsigned int dutyCycle);
 void timerISR();
@@ -59,43 +60,32 @@ int main(void) {
     NIOS2_WRITE_STATUS(0x1); //enable Nios II interrupts
 
     while (1) {
-        int SW_state = *SW;
-        int dutyCycle = (SW_state * 100) / 1023;
-        PWMcontrol(dutyCycle);
-        *LEDs = dutyCycle; 
+        *LEDs = dutyCycle;
     }
 
     return 0; 
 }
 
-void PWMcontrol(unsigned int dutyCycle) { //confguring timer and calculting the PWM
-    // adjust duty cycle based on the current switch state, keep the frequency at 25KHz for the fan (recheck datasheet)
+void timerISR() { //ensures at least one full cycle runs before checking the SW_state again
+    *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
+    
+    int SW_state = *SW;
+    dutyCycle = (SW_state * 100) / 1023;
+
     pwmHigh = (SYSTEM_CLOCK / PWM_freq) * (dutyCycle / 100.0);
     pwmLow = (SYSTEM_CLOCK / PWM_freq) - pwmHigh;
-
-    if (pwmState == 1) {
-        timerConfig(pwmHigh);
-    } 
     
-    else {
-        timerConfig(pwmLow);
-    }
-}
-
-void timerISR() {
-    *timerStatus = 0x0; // clear the TO bit
-    
-    pwmState = !pwmState; // toggle the PWM state for the next period
-    
+    // toggle GPIO 
     if (pwmState == 1) {
         *GPIO_1 |= 0x1; //high
-        timerConfig(pwmHigh);
+        timerConfig(pwmHigh); 
     } 
     
     else {
-        *GPIO_1 &= ~0x1; //low
-        timerConfig(pwmLow);
+        *GPIO_1 &= ~0x1; // low
+        timerConfig(pwmLow); 
     }
+    pwmState = !pwmState; // toggle state for next cycle
 }
 
 // void waitTO() { //polling timer (CPU block)

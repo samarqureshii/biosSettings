@@ -195,8 +195,11 @@ void adcRead(){ //read from the internal 12-bit ADC
 void timerISR() { //ensures at least one full cycle runs before checking the SW_state again
     *timerStatus = 0x0; // clear the TO bit to acknowledge the interrupt
     
-    int SW_state = *SW;
-    usage = (int)(((temperature - 25) * 100) / 105.0 + 0.5); //map temperature to usage 
+    //map temperature to CPU usage 
+    float temp_percentage = ((float)(temperature - 23) / 103) * 100.0;
+    usage = (int)(temp_percentage + 0.5); 
+    if (usage < 0) usage = 0;
+    if (usage > 100) usage = 100;
 
     int dutyCycle = usage;
 

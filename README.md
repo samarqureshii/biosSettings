@@ -1,5 +1,6 @@
 # Bios Settings
 > HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
+![project demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3U4NTd6YWk1YjN0bDUxcXVodGJiZHE5bDJmb2ZmcHhiMTBoeWxpNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zbc7Ec69tv7NRQtln7/giphy-downsized-large.gif)
 - `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
 - Exceptions when creating the project
 ### Systems Architecture
@@ -10,7 +11,6 @@
 ## Notes for the demo
 - Oscilloscope must be grounded to internal DE1 ground, not the voltage reg or power supply ground
 - Configure blink LED to ensure voltage reg is on 
-- Explain why the level shifter didn't work, and why we are operating at a lower fan speed 
 ## TODO
 - VGA driver (Annie)
     - ~~Assume given input of fan speed and temperature, continually update as they increase/decrease on the VGA~~

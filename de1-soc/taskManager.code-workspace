@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "mcu",
+			"path": "../mcu"
+		},
+		{
+			"name": "mcu_testing",
+			"path": "../mcu_testing"
+		}
+	],
+	"settings": {}
+}

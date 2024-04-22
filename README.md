@@ -4,7 +4,7 @@
 - `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
 - Exceptions when creating the project
 ### Systems Architecture
-![schematic-rev2](ece243_final.drawio.png)
+![schematic-rev2](ece243_final.drawio-2.png)
 ### Schematic Revision 1
 ![schematic-rev1](Untitled.png)
 

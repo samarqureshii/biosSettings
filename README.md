@@ -53,3 +53,5 @@
     - [12V DC brushless fan](https://www.creatroninc.com/product/12v-dc-brushless-fan-70x70x15mm/)
     - [PWM controlled](https://www.amazon.ca/Bearing-Cooling-NF-R8-Redux-1800-PWM/dp/B00KF7MVI2/ref=sr_1_11?crid=1P4D6WT2IIFVQ&dib=eyJ2IjoiMSJ9.LCkOiKCAN0PlHaIEkQb9OIFngdNSCuJjopA5aoWmUmJ89cVuPap5ubERcnirQBAh6XfE1XjtYVZiEPdCbVyRrE6zRtgmSFwz5JSy5OBSFyyP--tll3UJmEtxWPW9B3IseQmLCFMMpoY9Jb31b5BFdRcgVdg8_Bms4zxgq1B-iaCesThI9PF-Sq_RAqFxzysHYwlsYgc-hhJcyWfSDO5zbHlkE-Tc9OKJ8kgiDznLsP83j0EVgPR_Lkgd5LrDeEhLGlBhJY32CjsgOctRkKHZKxp3uePUwPp5vgZ-S3XIx8E.YzjD5qlG6fRc5XemmJiSypQoqBXmCtfdht6n3tFCCXk&dib_tag=se&keywords=pwm+cooling+fan&qid=1710369658&sprefix=pwm+cooling+fan%2Caps%2C94&sr=8-11)
 - FET and flyback to drive the motor (Myfab)
+
+https://www.canva.com/design/DAGByrgro00/HB6Eb61NtkFlg6IMMjyVEw/edit

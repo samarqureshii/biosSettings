@@ -1,5 +1,5 @@
 # Bios Settings
-> HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture
+> HW/SW Emulation of Windows ~~Bios~~ Nios Settings in Nios II Architecture. Temperature controlled CPU cooling, as well as BSOD mode.
 ![project demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3U4NTd6YWk1YjN0bDUxcXVodGJiZHE5bDJmb2ZmcHhiMTBoeWxpNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zbc7Ec69tv7NRQtln7/giphy-downsized-large.gif)
 - `-mcustom-fpu-cfg=60-2` - pass this to the C compiler to allow floating point hardware support
 - Exceptions when creating the project
